@@ -1,0 +1,3 @@
+Properties measured in Autodesk Fusion:
+Surface area: 27907.6 mm^2
+Volume: 2.594e5 mm^3
