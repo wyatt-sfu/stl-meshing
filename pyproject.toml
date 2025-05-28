@@ -4,7 +4,7 @@ requires = ["setuptools"]
 [project]
 name = "stlmeshing"
 version = "1.0.0"
-description = "Determine which points in a mesh lay inside the volume defined by an STL file."
+description = "Determine which points in a densely sampled mesh grid lay inside the volume defined by an STL file."
 readme = "README.md"
 license = { file = "LICENSE.txt" }
 authors = [{ name = "Wyatt Gronnemose" }]

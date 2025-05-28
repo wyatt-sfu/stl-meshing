@@ -1,2 +1,2 @@
 # stl-meshing
-Determine which points in a mesh lay inside the volume defined by an STL file
+Determine which points in a densely sampled mesh grid lay inside the volume defined by an STL file.
