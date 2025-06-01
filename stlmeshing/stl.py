@@ -96,33 +96,33 @@ class STL:
         #                       | V2_x, V2_y, V2_z |
         #                       | V3_x, V3_y, V3_z |
 
-        vol = (
-            np.sum(
+        vol = np.sum(
+            (
                 -self.triangles[:, 2, 0]
                 * self.triangles[:, 1, 1]
                 * self.triangles[:, 0, 2]
             )
-            + np.sum(
+            + (
                 self.triangles[:, 1, 0]
                 * self.triangles[:, 2, 1]
                 * self.triangles[:, 0, 2]
             )
-            + np.sum(
+            + (
                 self.triangles[:, 2, 0]
                 * self.triangles[:, 0, 1]
                 * self.triangles[:, 1, 2]
             )
-            + np.sum(
+            + (
                 -self.triangles[:, 0, 0]
                 * self.triangles[:, 2, 1]
                 * self.triangles[:, 1, 2]
             )
-            + np.sum(
+            + (
                 -self.triangles[:, 1, 0]
                 * self.triangles[:, 0, 1]
                 * self.triangles[:, 2, 2]
             )
-            + np.sum(
+            + (
                 self.triangles[:, 0, 0]
                 * self.triangles[:, 1, 1]
                 * self.triangles[:, 2, 2]
