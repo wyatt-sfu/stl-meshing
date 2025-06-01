@@ -83,5 +83,50 @@ class STL:
         return np.sum(np.linalg.norm(np.cross(vec12, vec13), axis=-1) / 2.0)
 
     def volume(self):
-        """ """
-        pass
+        """Compute the volume.
+
+        This function computes the volume of the triangulated surface using the
+        algorithm described in the paper, "Efficient Feature Extraction for 2D/3D
+        Objects in Mesh Representation", by Zhang and Chen.
+        http://chenlab.ece.cornell.edu/Publication/Cha/icip01_Cha.pdf
+        """
+
+        # Reminder (copied from constructor)
+        # Triangle definition : | V1_x, V1_y, V1_z |
+        #                       | V2_x, V2_y, V2_z |
+        #                       | V3_x, V3_y, V3_z |
+
+        vol = (
+            np.sum(
+                -self.triangles[:, 2, 0]
+                * self.triangles[:, 1, 1]
+                * self.triangles[:, 0, 2]
+            )
+            + np.sum(
+                self.triangles[:, 1, 0]
+                * self.triangles[:, 2, 1]
+                * self.triangles[:, 0, 2]
+            )
+            + np.sum(
+                self.triangles[:, 2, 0]
+                * self.triangles[:, 0, 1]
+                * self.triangles[:, 1, 2]
+            )
+            + np.sum(
+                -self.triangles[:, 0, 0]
+                * self.triangles[:, 2, 1]
+                * self.triangles[:, 1, 2]
+            )
+            + np.sum(
+                -self.triangles[:, 1, 0]
+                * self.triangles[:, 0, 1]
+                * self.triangles[:, 2, 2]
+            )
+            + np.sum(
+                self.triangles[:, 0, 0]
+                * self.triangles[:, 1, 1]
+                * self.triangles[:, 2, 2]
+            )
+        )
+
+        return np.abs(vol) / 6
