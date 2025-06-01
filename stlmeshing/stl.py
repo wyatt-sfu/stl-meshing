@@ -3,7 +3,7 @@ import numpy as np
 import tqdm
 
 
-class Stl:
+class STL:
     # Constants relating the STL file structure
     HEADER_SIZE = 80  # Number of bytes in the header
     NUM_TRI_SIZE = 4  # Number of bytes for the number of triangles
@@ -40,22 +40,22 @@ class Stl:
         Args:
             filename (str): Filename of the input STL file (should end with .stl)
         """
-        tri_struct = struct.Struct(Stl.TRIANGLE_FORMAT)
+        tri_struct = struct.Struct(STL.TRIANGLE_FORMAT)
 
         with open(filename, "rb") as stl_file:
             # Read the header and discard
-            stl_file.read(Stl.HEADER_SIZE)
+            stl_file.read(STL.HEADER_SIZE)
 
             # Read the field containing the number of triangles
-            n_tri_bytes = stl_file.read(Stl.NUM_TRI_SIZE)
-            self.n_triangles = struct.unpack(Stl.NUM_TRI_FORMAT, n_tri_bytes)[0]
+            n_tri_bytes = stl_file.read(STL.NUM_TRI_SIZE)
+            self.n_triangles = struct.unpack(STL.NUM_TRI_FORMAT, n_tri_bytes)[0]
 
             # Allocate the output data structures
             self.triangles = np.zeros((self.n_triangles, 3, 3))
             self.normals = np.zeros((self.n_triangles, 3))
 
             for i in tqdm.trange(self.n_triangles, desc="Reading STL file:"):
-                fields = tri_struct.unpack(stl_file.read(Stl.TRIANGLE_SIZE))
+                fields = tri_struct.unpack(stl_file.read(STL.TRIANGLE_SIZE))
                 self.normals[i, 0] = fields[0]
                 self.normals[i, 1] = fields[1]
                 self.normals[i, 2] = fields[2]
