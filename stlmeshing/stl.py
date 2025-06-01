@@ -21,11 +21,11 @@ class Stl:
         #     Triangle definition : | V1_x, V1_y, V1_z |
         #                           | V2_x, V2_y, V2_z |
         #                           | V3_x, V3_y, V3_z |
-        self.triangles = np.zeros()
+        self.triangles = np.zeros((self.n_triangles, 3, 3))
 
         # The normals is an array of shape (n_triangles, 3) containing a vector
         # normal to each triangle. Last dimension is ordered (x, y, z).
-        self.normals = np.zeros()
+        self.normals = np.zeros((self.n_triangles, 3))
 
         if filename is not None:
             self.load_file(filename)
@@ -48,16 +48,14 @@ class Stl:
 
             # Read the field containing the number of triangles
             n_tri_bytes = stl_file.read(Stl.NUM_TRI_SIZE)
-            n_triangles = struct.unpack(Stl.NUM_TRI_FORMAT, n_tri_bytes)[0]
+            self.n_triangles = struct.unpack(Stl.NUM_TRI_FORMAT, n_tri_bytes)[0]
 
             # Allocate the output data structures
-            self.triangles = np.zeros((n_triangles, 3, 3))
-            self.normals = np.zeros((n_triangles, 3))
+            self.triangles = np.zeros((self.n_triangles, 3, 3))
+            self.normals = np.zeros((self.n_triangles, 3))
 
-            for i in tqdm.trange(n_triangles, desc="Reading STL file:"):
-                fields = tri_struct.unpack(
-                    Stl.TRIANGLE_FORMAT, stl_file.read(Stl.TRIANGLE_SIZE)
-                )
+            for i in tqdm.trange(self.n_triangles, desc="Reading STL file:"):
+                fields = tri_struct.unpack(stl_file.read(Stl.TRIANGLE_SIZE))
                 self.normals[i, 0] = fields[0]
                 self.normals[i, 1] = fields[1]
                 self.normals[i, 2] = fields[2]
@@ -72,8 +70,17 @@ class Stl:
                 self.triangles[i, 2, 2] = fields[11]
 
     def surface_area(self):
-        """Compute the surface area."""
-        pass
+        """Compute the surface area.
+
+        This function computes the surface area as the sum of the area of triangles.
+        The area of each triangle can be found using the cross product, as the
+        magnitude of the cross product of two vectors in the area of the parallelogram
+        that the vectors span. The triangle area is then just half the parallelogram
+        area.
+        """
+        vec12 = self.triangles[:, 1, :] - self.triangles[:, 0, :]
+        vec13 = self.triangles[:, 2, :] - self.triangles[:, 0, :]
+        return np.sum(np.linalg.norm(np.cross(vec12, vec13), axis=-1) / 2.0)
 
     def volume(self):
         """ """
