@@ -69,6 +69,39 @@ class STL:
                 self.triangles[i, 2, 1] = fields[10]
                 self.triangles[i, 2, 2] = fields[11]
 
+    def write_file(self, filename: str):
+        """Write a triangulated surface to the STL file specified.
+
+        Args:
+            filename (str): Filename of the output STL file (should end with .stl)
+        """
+        tri_struct = struct.Struct(STL.TRIANGLE_FORMAT)
+        header = bytearray(STL.HEADER_SIZE)
+        with open(filename, mode="wb") as stl_file:
+            # Write out the header info to the STL file
+            stl_file.write(header)
+            stl_file.write(struct.pack(STL.NUM_TRI_FORMAT, self.n_triangles))
+
+            for i in tqdm.trange(self.n_triangles, desc="Writing STL file:"):
+                # Write the triangle to the file
+                stl_file.write(
+                    tri_struct.pack(
+                        self.normals[i, 0],
+                        self.normals[i, 1],
+                        self.normals[i, 2],
+                        self.triangles[i, 0, 0],
+                        self.triangles[i, 0, 1],
+                        self.triangles[i, 0, 2],
+                        self.triangles[i, 1, 0],
+                        self.triangles[i, 1, 1],
+                        self.triangles[i, 1, 2],
+                        self.triangles[i, 2, 0],
+                        self.triangles[i, 2, 1],
+                        self.triangles[i, 2, 2],
+                        0,
+                    )
+                )
+
     def surface_area(self):
         """Compute the surface area.
 
