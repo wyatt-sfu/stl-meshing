@@ -182,3 +182,26 @@ class STL:
         z_max = np.max(self.triangles[:, :, 2])
 
         return ((x_min, x_max), (y_min, y_max), (z_min, z_max))
+
+    def apply_scale(self, scale_factor: float):
+        """Apply a multiplicative scale to all the triangles.
+
+        Args:
+            scale_factor (float): Scale all the triangles by this factor
+        """
+        self.triangles *= scale_factor
+
+    def shift_object(self, offset: np.ndarray):
+        """Shift the STL object by the specified amount
+
+        Args:
+            offset (np.ndarray): This array contains an (x, y, z) shift which is
+                applied to each triangle in the surface.
+        """
+        if offset.ndim != 1:
+            raise RuntimeError("Offset array must be one dimensional")
+
+        if offset.shape(0) != 3:
+            raise RuntimeError("Offset array must have x, y and z components")
+
+        self.triangles += offset
