@@ -130,3 +130,22 @@ class STL:
         )
 
         return np.abs(vol) / 6
+
+    def bounding_box(self):
+        """Comptue the bounding box of the STL object.
+
+        This is the minimum and maximum in x, y, z for all of the triangles in
+        the file.
+
+        Returns: Tuple defined as ((x_min, x_max), (y_min, y_max), (z_min, z_max))
+        """
+        x_min = np.min(self.triangles[:, :, 0])
+        x_max = np.max(self.triangles[:, :, 0])
+
+        y_min = np.min(self.triangles[:, :, 1])
+        y_max = np.max(self.triangles[:, :, 1])
+
+        z_min = np.min(self.triangles[:, :, 2])
+        z_max = np.max(self.triangles[:, :, 2])
+
+        return ((x_min, x_max), (y_min, y_max), (z_min, z_max))
