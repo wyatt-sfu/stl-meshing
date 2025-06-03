@@ -165,7 +165,7 @@ class STL:
         return np.abs(vol) / 6
 
     def bounding_box(self):
-        """Comptue the bounding box of the STL object.
+        """Compute the bounding box of the STL object.
 
         This is the minimum and maximum in x, y, z for all of the triangles in
         the file.
