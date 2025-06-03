@@ -17,7 +17,7 @@ print(f"\ty: {y_min} - {y_max}")
 print(f"\tz: {z_min} - {z_max}")
 
 # Create a test mesh based on the bounding box
-point_spacing = 1.412
+point_spacing = 1.7
 border_size = 2
 npoints_x = (
     int(np.rint(((x_max - x_min) / point_spacing) + (2 * border_size)).item()) + 1
