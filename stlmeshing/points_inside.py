@@ -4,19 +4,25 @@ from .stl import STL
 
 
 def points_inside(
-    stl: STL, mesh_x: np.ndarray, mesh_y: np.ndarray, mesh_z: np.ndarray, tol=1e-6
+    stl: STL,
+    mesh_x: np.ndarray,
+    mesh_y: np.ndarray,
+    mesh_z: np.ndarray,
+    tol: float = 1e-3,
 ):
     """
     Check if the given points are inside or outside the volume defined by the STL
     object. This is technically called the "Point-in-Polygon" problem
-    (https://en.wikipedia.org/wiki/Point_in_polygon).
-
-    https://stackoverflow.com/questions/44513525/testing-whether-a-3d-point-is-inside-a-3d-polyhedron
-
-
-    Moller-Trumbore Intersection Algorithm
+    (https://en.wikipedia.org/wiki/Point_in_polygon). It is expected that the mesh_*
+    arguments are generated with numpy.meshgrid.
 
     Args:
+        stl (STL): The STL object under examination
+        mesh_x (np.ndarray): 3D array containing the X dimension of each point
+        mesh_y (np.ndarray): 3D array containing the Y dimension of each point
+        mesh_z (np.ndarray): 3D array containing the Z dimension of each point
+        tol (float): Tolerance to use for checking if the ray is parallel to
+            each triangle
 
     Returns:
     """
@@ -31,7 +37,7 @@ def points_inside(
 
 
 @numba.njit(parallel=True)
-def _check_points(triangles, bounding_box, mesh_x, mesh_y, mesh_z, tol=1e-3):
+def _check_points(triangles, bounding_box, mesh_x, mesh_y, mesh_z, tol):
     """
     Use a ray casting algorithm to check if the provided points (defined by the
     mesh arguments) are inside the triangulated surface or not. This function is
@@ -130,7 +136,7 @@ def _ray_intersects(triangle, ray, origin, tol):
     v = np.dot(ray, qvec) * inv_det
     if v < 0 or (u + v) > 1.0:
         return False
-    
+
     t = np.dot(edge2, qvec) * inv_det
     if t < 0:
         return False
