@@ -31,7 +31,7 @@ def points_inside(
 
 
 @numba.njit(parallel=True)
-def _check_points(triangles, bounding_box, mesh_x, mesh_y, mesh_z, tol=1e-4):
+def _check_points(triangles, bounding_box, mesh_x, mesh_y, mesh_z, tol=1e-3):
     """
     Use a ray casting algorithm to check if the provided points (defined by the
     mesh arguments) are inside the triangulated surface or not. This function is
@@ -75,7 +75,8 @@ def _check_points(triangles, bounding_box, mesh_x, mesh_y, mesh_z, tol=1e-4):
                 # Now we count the number of intersections to determine if the point is
                 # inside the volume or not.
                 intersection_count = 0
-                ray =  np.random.rand(3)
+                # ray =  np.random.rand(3)
+                ray = np.asarray([1.0, 0.0, 0.0])
                 for n in range(n_triangles):
                     if _ray_intersects(triangles[n, ...], ray, point, tol):
                         intersection_count += 1
@@ -121,17 +122,17 @@ def _ray_intersects(triangle, ray, origin, tol):
     # Compute U parameter
     tvec = origin - v0
     u = np.dot(tvec, pvec) * inv_det
-    if u < tol or u > 1.0 - tol:
+    if u < 0 or u > 1.0:
         return False
 
     # Compute V parameter
     qvec = np.cross(tvec, edge1)
     v = np.dot(ray, qvec) * inv_det
-    if v < tol or (u + v) > 1.0 - tol:
+    if v < 0 or (u + v) > 1.0:
         return False
     
     t = np.dot(edge2, qvec) * inv_det
-    if t < tol:
+    if t < 0:
         return False
 
     return True
