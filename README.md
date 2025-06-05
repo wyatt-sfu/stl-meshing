@@ -60,3 +60,7 @@ print("... Done computing which points are inside the mesh")
 
 plot_interactive_3d(inside)
 ```
+
+The result of this example script is three interactive plots showing different slices through the 3D space.
+A screengrab is shown below.
+![Plots showing slices](examples/stl_mesh_test_results.png)
