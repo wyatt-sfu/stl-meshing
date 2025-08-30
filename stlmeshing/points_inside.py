@@ -59,7 +59,7 @@ def _check_points(triangles, bounding_box, mesh_x, mesh_y, mesh_z, tol):
 
     for i in range(mesh_shape[0]):
         for j in range(mesh_shape[1]):
-            for k in numba.prange(mesh_shape[2]):
+            for k in range(mesh_shape[2]):
                 x = mesh_x[i, j, k]
                 y = mesh_y[i, j, k]
                 z = mesh_z[i, j, k]
@@ -83,7 +83,7 @@ def _check_points(triangles, bounding_box, mesh_x, mesh_y, mesh_z, tol):
                 intersection_count = 0
                 # ray =  np.random.rand(3)
                 ray = np.asarray([1.0, 0.0, 0.0])
-                for n in range(n_triangles):
+                for n in numba.prange(n_triangles):
                     if _ray_intersects(triangles[n, ...], ray, point, tol):
                         intersection_count += 1
 
