@@ -25,7 +25,11 @@ class XYSliceIndexTracker:
         self.index = 0
         self.data3d = data3d
         self.ax = ax
-        self.im = ax.imshow(self.data3d[:, :, self.index], vmin=0, vmax=np.max(data3d))
+        self.im = ax.imshow(
+            self.data3d[:, :, self.index].T, vmin=0, vmax=np.max(data3d), origin="lower"
+        )
+        self.ax.set_xlabel("X axis")
+        self.ax.set_ylabel("Y axis")
         self.update()
 
     def on_scroll(self, event):
@@ -35,7 +39,7 @@ class XYSliceIndexTracker:
         self.update()
 
     def update(self):
-        self.im.set_data(self.data3d[:, :, self.index])
+        self.im.set_data(self.data3d[:, :, self.index].T)
         self.ax.set_title(f"XY Slice (scroll wheel)\nIndex {self.index}")
         self.im.axes.figure.canvas.draw()
 
@@ -45,7 +49,11 @@ class XZSliceIndexTracker:
         self.index = 0
         self.data3d = data3d
         self.ax = ax
-        self.im = ax.imshow(self.data3d[:, self.index, :], vmin=0, vmax=np.max(data3d))
+        self.im = ax.imshow(
+            self.data3d[:, self.index, :].T, vmin=0, vmax=np.max(data3d), origin="lower"
+        )
+        self.ax.set_xlabel("X axis")
+        self.ax.set_ylabel("Z axis")
         self.update()
 
     def on_scroll(self, event):
@@ -55,7 +63,7 @@ class XZSliceIndexTracker:
         self.update()
 
     def update(self):
-        self.im.set_data(self.data3d[:, self.index, :])
+        self.im.set_data(self.data3d[:, self.index, :].T)
         self.ax.set_title(f"XZ Slice (scroll wheel)\nIndex {self.index}")
         self.im.axes.figure.canvas.draw()
 
@@ -65,7 +73,11 @@ class YZSliceIndexTracker:
         self.index = 0
         self.data3d = data3d
         self.ax = ax
-        self.im = ax.imshow(self.data3d[self.index, :, :], vmin=0, vmax=np.max(data3d))
+        self.im = ax.imshow(
+            self.data3d[self.index, :, :].T, vmin=0, vmax=np.max(data3d), origin="lower"
+        )
+        self.ax.set_xlabel("Y axis")
+        self.ax.set_ylabel("Z axis")
         self.update()
 
     def on_scroll(self, event):
@@ -75,6 +87,6 @@ class YZSliceIndexTracker:
         self.update()
 
     def update(self):
-        self.im.set_data(self.data3d[self.index, :, :])
+        self.im.set_data(self.data3d[self.index, :, :].T)
         self.ax.set_title(f"YZ Slice (scroll wheel)\nIndex {self.index}")
         self.im.axes.figure.canvas.draw()
